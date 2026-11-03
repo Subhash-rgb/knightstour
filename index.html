@@ -1,0 +1,17 @@
+<!DOCTYPE html><meta charset=utf-8><title>Knight's Tour</title>
+<style>body{font-family:system-ui;text-align:center;background:#1b1f2a;color:#eee}
+#b{display:grid;grid-template-columns:repeat(8,56px);margin:20px auto;width:448px}
+#b div{width:56px;height:56px;display:flex;align-items:center;justify-content:center;font-weight:700;cursor:pointer}
+.l{background:#eeeed2;color:#333}.d{background:#769656}</style>
+<h1>Knight’s Tour</h1><p>Click a square to start. The knight visits every square once.</p>
+<div id=b></div><button onclick=go()>Run again</button>
+<script>
+const b=document.getElementById('b'),cells=[];let start=0,timer;
+for(let i=0;i<64;i++){const d=document.createElement('div');d.className=((i>>3)+i)%2?'d':'l';d.onclick=()=>{start=i;go()};b.append(d);cells.push(d)}
+const mv=[[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1]];
+function nb(p,seen){const r=p>>3,c=p&7,o=[];for(const[x,y]of mv){const R=r+x,C=c+y;if(R>=0&&R<8&&C>=0&&C<8&&!seen[R*8+C])o.push(R*8+C)}return o}
+function go(){clearInterval(timer);cells.forEach(c=>c.textContent='');const seen=Array(64).fill(0);let p=start,n=1;seen[p]=1;cells[p].textContent=n;
+timer=setInterval(()=>{const o=nb(p,seen);if(!o.length){clearInterval(timer);return}
+o.sort((a,z)=>nb(a,seen).length-nb(z,seen).length);p=o[0];seen[p]=1;cells[p].textContent=++n},120)}
+go();
+</script>
